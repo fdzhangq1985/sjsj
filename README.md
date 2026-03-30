@@ -67,7 +67,16 @@ ossutil cp -r dist/ oss://your-bucket-name/ --recursive
 4. 在 OSS 控制台启用静态网站托管，设置首页为 `index.html`，错误页面也可设置为 `index.html`。
 
 5. 访问生成的域名即可查看网站。
+## 容器化部署（可选）
 
+若希望使用容器化部署，可以使用仓库中的 `Dockerfile` 进行构建：
+
+```bash
+docker build -t shuju-shijie .
+docker run -p 80:80 shuju-shijie
+```
+
+然后将构建后的镜像发布到阿里云容器服务（ACK）或 ECS。
 ## 备注
 
 该仓库已将生成代码提交到 `main` 分支，包含完整前端原型与部署文档说明。

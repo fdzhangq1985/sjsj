@@ -1,1 +1,15 @@
-# Dockerfile for Node.js Application\n\n# Use the official Node.js image as a base\nFROM node:14\n\n# Set the working directory in the container\nWORKDIR /usr/src/app\n\n# Copy package.json and package-lock.json\nCOPY package*.json ./\n\n# Install dependencies\nRUN npm install\n\n# Copy the rest of the application code\nCOPY . .\n\n# Expose the port the app runs on\nEXPOSE 8080\n\n# Run the application\nCMD [ "node", "app.js" ]\n
+# Multi-stage Dockerfile for Vite static website
+
+# 1. build stage
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# 2. production stage
+FROM nginx:stable-alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
